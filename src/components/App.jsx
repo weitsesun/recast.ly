@@ -7,16 +7,18 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      currentVideo: ""
+      currentVideo: exampleVideoData[0]
     }
   }
 
-  onClickVideo() {
+  markComplete(video){
     this.setState({
-      currentVideo: this
+      currentVideo: video
     });
-    console.log(this.state.currentVideo)
+    console.log(video);
   }
+
+  
 
   render() {
     return (<div>
@@ -30,7 +32,7 @@ class App extends React.Component {
         <div>
           <h5>
             <em>videoPlayer</em> 
-            <VideoPlayer video={exampleVideoData[0]}/>
+            <VideoPlayer video={this.state.currentVideo}/>
           </h5>
           </div>
       </div>
@@ -38,7 +40,7 @@ class App extends React.Component {
         <div>
           <h5>
             <em>videoList</em> 
-            <VideoList videos={exampleVideoData} onClick={this.onClickVideo.bind(this)}/>
+            <VideoList videos={exampleVideoData} markComplete={this.markComplete.bind(this)}/>
         </h5>
         </div>
       </div>
