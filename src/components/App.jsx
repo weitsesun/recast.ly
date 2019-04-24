@@ -1,13 +1,24 @@
 import VideoList from './VideoList.js';
 import exampleVideoData from "../data/exampleVideoData.js"
 import VideoPlayer from './VideoPlayer.js';
+import Search from './Search.js'
+import YOUTUBE_API_KEY from '../config/youtube.js';
+
+// Live-update
+  // Add event listener for textbox
+  // When the textbox changes:
+    // Trigger state-change
+    // create a controlled input box
+    // create an onChange handler in App.jsx
+    // Call handleSearch on change
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      currentVideo: exampleVideoData[0]
+      currentVideo: exampleVideoData[0],
+      videos: exampleVideoData,
+      query: 'cats'
     }
   }
 
@@ -18,30 +29,48 @@ class App extends React.Component {
     console.log(video);
   }
 
-  
+  handleSearch() {
+    this.props.searchYouTube({query: this.state.query, key: YOUTUBE_API_KEY}, videos => this.setState({videos, currentVideo: videos[0]}));
+  }
+
+  componentDidMount() {
+    // let debounced = _.debounce((e) => console.log('asdf'), 25, {leading: true});
+    // debounced();
+
+    this.handleSearch();
+    //component will automatically be rendered
+  }
+
+  componentDidUpdate() {
+    _.debounce(this.handleSearch.bind(this),500, {leading: true})();
+  }
+
+  liveUpdate(e) {
+  // Live-update of search results
+    // Add event listener on form input
+    // On change, trigger state change w/ debouncer:
+      // Automatically triggers CDU:
+        // Inside CDU: call searchYouTube
+    this.setState({
+      query: e.target.value
+    });
+    console.log(e.target.value)
+  }
 
   render() {
     return (<div>
     <nav className="navbar">
       <div className="col-md-6 offset-md-3">
-        <div><h5><em>search</em> view goes here</h5></div>
+        <Search liveUpdate={this.liveUpdate.bind(this)}/>
       </div>
     </nav>
     <div className="row">
       <div className="col-md-7">
-        <div>
-          <h5>
-            <em>videoPlayer</em> 
-            <VideoPlayer video={this.state.currentVideo}/>
-          </h5>
-          </div>
+        <VideoPlayer video={this.state.currentVideo}/>
       </div>
       <div className="col-md-5">
         <div>
-          <h5>
-            <em>videoList</em> 
-            <VideoList videos={exampleVideoData} markComplete={this.markComplete.bind(this)}/>
-        </h5>
+          <VideoList videos={this.state.videos} markComplete={this.markComplete.bind(this)}/>
         </div>
       </div>
     </div>

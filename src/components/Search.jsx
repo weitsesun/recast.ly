@@ -1,7 +1,18 @@
-var Search = () => (
+import searchYouTube from '../lib/searchYouTube.js'
+import YOUTUBE_API_KEY from '../config/youtube.js';
+
+//handle button "onClick"
+//"onClick" => call searchYouTube
+  //pass in whatever's in the search box into searchYouTube function
+
+var Search = (props) => (
   <div className="search-bar form-inline">
-    <input className="form-control" type="text" />
-    <button className="btn hidden-sm-down">
+    <input className="form-control" type="text" onChange={props.liveUpdate}/>
+    <button className="btn hidden-sm-down" onClick={searchYouTube.bind(this, {
+      query: "cats",
+      max: 5,
+      key: YOUTUBE_API_KEY
+    }, (data) => console.log(data))}>
       <span className="glyphicon glyphicon-search"></span>
     </button>
   </div> 
