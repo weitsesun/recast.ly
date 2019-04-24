@@ -45,7 +45,8 @@ class App extends React.Component {
   }
 
   // componentDidUpdate() {
-    
+    // var debouncer = _.debounce(this.handleSearch.bind(this),500, {leading: true});
+    // debouncer();
   // }
 
   liveUpdate(e) {
@@ -57,15 +58,14 @@ class App extends React.Component {
     this.setState({
       query: e.target.value
     });
-    var debouncer = _.debounce(this.handleSearch.bind(this),500, {leading: true});
-    debouncer();
+    this.handleSearch();
   }
 
   render() {
     return (<div>
     <nav className="navbar">
       <div className="col-md-6 offset-md-3">
-        <Search liveUpdate={this.liveUpdate.bind(this)}/>
+        <Search liveUpdate={_.debounce(this.liveUpdate.bind(this),500,{leading:true})}/>
       </div>
     </nav>
     <div className="row">
