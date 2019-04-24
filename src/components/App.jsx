@@ -20,16 +20,19 @@ class App extends React.Component {
       videos: exampleVideoData,
       query: 'cats'
     }
+    // this.handleSearch();
   }
 
   markComplete(video){
     this.setState({
       currentVideo: video
     });
-    console.log(video);
+
   }
 
   handleSearch() {
+    // debugger;
+    console.log('hi')
     this.props.searchYouTube({query: this.state.query, key: YOUTUBE_API_KEY}, videos => this.setState({videos, currentVideo: videos[0]}));
   }
 
@@ -41,9 +44,9 @@ class App extends React.Component {
     //component will automatically be rendered
   }
 
-  componentDidUpdate() {
-    _.debounce(this.handleSearch.bind(this),500, {leading: true})();
-  }
+  // componentDidUpdate() {
+    
+  // }
 
   liveUpdate(e) {
   // Live-update of search results
@@ -54,7 +57,8 @@ class App extends React.Component {
     this.setState({
       query: e.target.value
     });
-    console.log(e.target.value)
+    var debouncer = _.debounce(this.handleSearch.bind(this),500, {leading: true});
+    debouncer();
   }
 
   render() {
